@@ -8,7 +8,12 @@ export default Vue.extend({
 
 <template>
   <div :class="$style.app">
-    <p>testing</p>
+    <ul :class="$style.nav">
+      <li :class="$style.logo">AutoTWOW</li>
+      <li>Home</li>
+      <li>Something</li>
+      <li>Other Thing</li>
+    </ul>
   </div>
 </template>
 
@@ -20,13 +25,40 @@ export default Vue.extend({
   --primary: ;
   --secondary: ;
 }
+
+* {
+  margin: 0;
+  padding: 0;
+}
 </style>
 
 <style lang="postcss" module>
+body {
+  background-color: var(--dark);
+}
+
 .app {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  margin: auto;
   background-color: var(--dark);
   color: var(--light);
+}
+
+.nav {
+  list-style-type: none;
+  overflow: hidden;
+  border-bottom: 3px solid green;
+
+  & li {
+    float: left;
+    padding: 10px;
+
+    &.logo {
+      font-weight: bolder;
+    }
+
+    &:hover {
+      background-color: #202020;
+    }
+  }
 }
 </style>
