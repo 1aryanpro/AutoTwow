@@ -11,9 +11,9 @@ export default Vue.extend({
     <nav>
       <ul>
         <li :class="$style.brand">AutoTWOW</li>
-        <li>Home</li>
-        <li>Something</li>
-        <li>Other Thing</li>
+        <li>Voting</li>
+        <li>Responses</li>
+        <li>Dashboard</li>
       </ul>
     </nav>
   </div>
@@ -21,11 +21,11 @@ export default Vue.extend({
 
 <style lang="postcss">
 :root {
-  --dark: #303030;
-  --light: lightgray;
+  --dark: #2F3136;
+  --light: #FFFFFF;
 
-  --primary: ;
-  --secondary: ;
+  --primary: #7289DA;
+  --secondary: #5F7731;
 }
 
 * {
@@ -46,7 +46,7 @@ body {
 }
 
 nav {
-  border-bottom: 3px solid green;
+  border-bottom: 3px solid var(--primary);
 
   & ul {
     list-style-type: none;
@@ -59,8 +59,7 @@ nav {
   & li {
     float: right;
     height: 50px;
-    width: 110px;
-    padding: 13px 10px;
+    padding: 13px 15px;
     text-align: center;
 
     &.brand {
