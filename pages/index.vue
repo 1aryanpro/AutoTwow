@@ -8,12 +8,14 @@ export default Vue.extend({
 
 <template>
   <div :class="$style.app">
-    <ul :class="$style.nav">
-      <li :class="$style.logo">AutoTWOW</li>
-      <li>Home</li>
-      <li>Something</li>
-      <li>Other Thing</li>
-    </ul>
+    <nav>
+      <ul>
+        <li :class="$style.brand">AutoTWOW</li>
+        <li>Home</li>
+        <li>Something</li>
+        <li>Other Thing</li>
+      </ul>
+    </nav>
   </div>
 </template>
 
@@ -43,21 +45,33 @@ body {
   color: var(--light);
 }
 
-.nav {
-  list-style-type: none;
-  overflow: hidden;
+nav {
   border-bottom: 3px solid green;
 
-  & li {
-    float: left;
-    padding: 10px;
+  & ul {
+    list-style-type: none;
+    overflow: hidden;
+    margin: 0 auto;
+    width: 60%;
+    align-items: center;
+  }
 
-    &.logo {
+  & li {
+    float: right;
+    height: 50px;
+    width: 110px;
+    padding: 13px 10px;
+    text-align: center;
+
+    &.brand {
       font-weight: bolder;
+      float: left;
+      background-color: #202020;
     }
 
     &:hover {
       background-color: #202020;
+      cursor: pointer;
     }
   }
 }
