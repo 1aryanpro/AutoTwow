@@ -36,3 +36,39 @@ function deviationVariance(inputVote) {
   );
 }
 deviationVariance('HABGDFEC');
+
+function AZVariance(inputVote) {
+  let screenSize = 8;
+  let leaderboardLen = 26
+  ideal = new Array();
+  for (let i = 0; i < leaderboardLen; i++) {
+    ideal.push(String.fromCharCode(65 + i));
+  }
+  voteArray = inputVote.split('');
+  function deviateLoop(array){
+    swerve = new Array();
+    for (let i = 0; i < voteArray.length; i++) {
+      const findIdeal = (element) => element == array[i];
+      let idealScore = (ideal.findIndex(findIdeal) / (leaderboardLen - 1)) * 100;
+      let votedScore = (i / (screenSize - 1)) * 100;
+      swerve.push(Math.abs(idealScore - votedScore));
+    }
+    return (swerve);
+  }
+  deviations = deviateLoop(voteArray);
+  let deviationSum = 0;
+  for (let i = 0; i < deviations.length; i++) {
+    deviationSum += deviations[i];
+  }
+  console.log(deviationSum);
+  perfectVote = voteArray.sort()
+  perfectDev = deviateLoop(perfectVote);
+  let perfectSum = 0;
+  for (let i = 0; i<perfectDev.length;i++){
+    perfectSum += perfectDev[i];
+  }
+  console.log(perfectSum)
+  finalDev = (deviationSum/screenSize) - (perfectSum/screenSize)
+  console.log('The average deviation for this vote was: ' + finalDev + '%');
+}
+AZVariance('ZSRNLJEA');
