@@ -20,12 +20,17 @@ export default Vue.extend({
 </template>
 
 <style lang="postcss">
-:root {
-  --dark: #2F3136;
-  --light: #FFFFFF;
 
-  --primary: #7289DA;
-  --secondary: #5F7731;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto&display=swap');
+
+:root {
+  --dark: #323031;
+  --light: #e5e5e5;
+
+  --primary: #177e89;
+  --primaryDark: #084c61;
+  --secondary: #db3a34;
+  --tertiary: #ffc857;
 }
 
 * {
@@ -37,6 +42,7 @@ export default Vue.extend({
 <style lang="postcss" module>
 body {
   background-color: var(--dark);
+  font-family: 'Roboto';
 }
 
 .app {
@@ -66,6 +72,8 @@ nav {
       font-weight: bolder;
       float: left;
       background-color: #202020;
+      font-family: 'Montserrat';
+      color: var(--primary);
     }
 
     &:hover {
