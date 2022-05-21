@@ -7,16 +7,7 @@ export default Vue.extend({
 </script>
 
 <template>
-  <div :class="$style.app">
-    <nav>
-      <ul>
-        <li :class="$style.brand">AutoTWOW</li>
-        <li>Voting</li>
-        <li>Responses</li>
-        <li>Dashboard</li>
-      </ul>
-    </nav>
-  </div>
+  <div :class="$style.app"></div>
 </template>
 
 <style lang="postcss">
@@ -36,48 +27,16 @@ export default Vue.extend({
   margin: 0;
   padding: 0;
 }
-</style>
 
-<style lang="postcss" module>
 body {
   background-color: var(--dark);
   font-family: 'Roboto', sans-serif;
-}
-
-.app {
-  margin: auto;
-  background-color: var(--dark);
   color: var(--light);
 }
+</style>
 
-nav ul {
-  list-style-type: none;
-  overflow: hidden;
-  margin: 0 auto;
-  width: 60%;
-  align-items: center;
-  border-bottom: 2px solid var(--tertiary);
-  border-top: 2px solid var(--tertiary);
-  background: #202020;
-}
-
-nav li {
-  float: right;
-  width: 100px;
-  padding: 13px 15px;
-  text-align: center;
-
-  border-left: 2px solid var(--tertiary);
-}
-
-nav li:nth-child(2) {
-  border-right: 2px solid var(--tertiary);
-}
-
-nav li.brand {
-  float: left;
-  border-right: 2px solid var(--tertiary);
-  font-family: 'Montserrat', sans-serif;
-  color: var(--tertiary);
+<style lang="postcss" module>
+.app {
+  margin: auto;
 }
 </style>
