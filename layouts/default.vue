@@ -10,7 +10,7 @@ export default {};
 </template>
 
 <style lang="postcss">
-@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Roboto&family=Source+Sans+Pro:wght@700&display=swap');
 
 :root {
   --dark: #323031;
