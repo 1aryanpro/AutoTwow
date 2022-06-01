@@ -1,5 +1,3 @@
-sortArr = [1, 0, 4, 6, 3, 7, 2, 5];
-
 function mergeBounds(start, stop) {
   if (stop - start < 2) {
     return [];

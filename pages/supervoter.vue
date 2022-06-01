@@ -1,20 +1,57 @@
 <script lang="ts">
-import { TwowSort } from '../components/twowsort.js';
+import TwowSort from '../components/twowsort.js';
 
 import Vue from 'vue';
-export default Vue.extend({});
+export default Vue.extend({
+  data() {
+    return {
+      state: 0,
+      userIDs: '',
+      responseText: '',
+      sort: new TwowSort([]),
+      responses: {},
+    };
+  },
+  methods: {
+    start() {
+      let sortArr: String[] = [];
+      this.responseText.split('\n').forEach((el) => {
+        let line = el.split('\t');
+        this.responses[line[0]] = line[1];
+        sortArr.push(line[0]);
+      });
+
+      this.sort = new TwowSort(sortArr);
+
+      this.state++;
+    },
+  },
+});
 </script>
 
 <template>
   <div :class="$style.page">
     <div v-if="state == 0">
+      <input type="text" v-model="userIDs" placeholder="Your Response Codes" />
+      <textarea
+        name="responseText"
+        id="responseText"
+        rows="20"
+        v-model="responseText"
+        placeholder="Responses"
+      ></textarea>
+      <button :class="$style.submit" @click="start">Start Supervoter</button>
+    </div>
+    <div v-if="state == 1">
       <div>
-        <button :class="$style.resp">Response Text 1</button
+        <button :class="$style.resp" @click="sort.cmp(0)">
+          {{ responses[sort.arr[sort.a]] }}</button
         ><button :class="$style.thumbup">👍</button
         ><button :class="$style.thumbdown">👎</button>
       </div>
       <div>
-        <button :class="$style.resp">Response Text 2</button
+        <button :class="$style.resp" @click="sort.cmp(1)">
+          {{ responses[sort.arr[sort.b]] }}</button
         ><button :class="$style.thumbup">👍</button
         ><button :class="$style.thumbdown">👎</button>
       </div>
@@ -49,9 +86,9 @@ button {
   border-left: none;
   background: var(--dark);
   color: var(--light);
-  padding: 5px;
   font-size: 1.5rem;
-  height: 100px;
+  padding: 5px;
+  height: 160px;
   width: 7vw;
 }
 
@@ -63,5 +100,36 @@ button.resp {
 button:hover {
   cursor: pointer;
   background-color: #202020;
+}
+
+input,
+textarea {
+  border: 3px solid var(--tertiary);
+  background: var(--dark);
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 1rem;
+  padding: 5px;
+  color: var(--light);
+  margin-top: 15px;
+  resize: none;
+}
+
+input {
+  width: 50%;
+}
+
+textarea {
+  width: 100%;
+}
+
+button.submit {
+  width: 40%;
+  height: 50px;
+  border: none;
+  background: var(--tertiary);
+  color: var(--dark);
+  font-weight: bold;
+  margin-top: 15px;
 }
 </style>
