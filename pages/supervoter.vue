@@ -22,27 +22,41 @@ export default Vue.extend({
       bTier: [],
       aTier: [],
       counts: {},
+      wcConf: {},
       sortStep: 0,
+      wordCount: 0,
+      cur: '',
     };
   },
   methods: {
     nextStep() {
       if (this.state == 0) {
-        let sortArr = [];
         this.responseText.split('\n').forEach((el) => {
           let line = el.split('\t');
           this.responses[line[0]] = line[1];
           this.counts[line[0]] = countWords(line[1]);
-          sortArr.push(line[0]);
+          this.wcConf[line[0]] = !/^[0-9A-Za-z …’“”:,'".!?]+$/.test(line[1]);
         });
+        this.nextWcCheck();
+      }
 
+      if (this.state == 1) {
+        let sortArr = Object.keys(this.responses);
         this.dTier = sortArr.filter((id) => this.counts[id] != 10);
         this.bTier = sortArr.filter((id) => this.counts[id] == 10);
         this.sort = new TwowSort(this.dTier, true, false);
         this.autoCmp();
-
-        this.state++;
       }
+      this.state++;
+    },
+    nextWcCheck() {
+      this.counts[this.cur] = this.wordCount;
+      this.wcConf[this.cur] = false;
+      this.cur = Object.keys(this.wcConf).find(
+        (key) => this.wcConf[key] == true
+      );
+      if (this.cur == undefined) this.nextStep();
+      else this.wordCount = this.counts[this.cur];
     },
     cmp(greater) {
       this.sort.cmp(greater);
@@ -102,14 +116,21 @@ export default Vue.extend({
       ></textarea>
       <button :class="$style.submit" @click="nextStep">Start Supervoter</button>
     </div>
-    <div v-if="state == 2">
-      <div>
-        <button :class="$style.wccheck_btn">
-          {{ responses[sort.arr[sort.a]] }}</button
-        ><input type="number" :class="$style.wccheck_input" />
-      </div>
-    </div>
     <div v-if="state == 1">
+      <div>
+        <button :class="$style.wccheck_resp">
+          {{ responses[cur] }}</button
+        ><input
+          type="number"
+          :class="$style.wccheck_input"
+          v-model="wordCount"
+        /><button :class="$style.wccheck_submit" @click="nextWcCheck()">
+          Next
+        </button>
+      </div>
+      <button :class="$style.submit" @click="nextStep">Skip</button>
+    </div>
+    <div v-if="state == 2">
       <div>
         <button :class="$style.resp" @click="cmp(0)">
           {{ responses[sort.arr[sort.a]] }}</button
@@ -141,9 +162,9 @@ export default Vue.extend({
         </button>
       </div>
     </div>
-    <p>Array: {{ sort.arr.join('') }}</p>
-    <p>Up: {{ sort.up.join('') }}</p>
-    <p>Down: {{ sort.down.join('') }}</p>
+    <!-- <p>Array: {{ sort.arr.join('') }}</p> -->
+    <!-- <p>Up: {{ sort.up.join('') }}</p> -->
+    <!-- <p>Down: {{ sort.down.join('') }}</p> -->
   </div>
 </template>
 
@@ -222,8 +243,18 @@ button.submit {
   margin-top: 15px;
 }
 
-.wccheck_btn {
+.wccheck_resp {
   width: 60%;
+  border-left: 2px solid var(--tertiary);
+}
+
+.wccheck_resp:hover {
+  cursor: default;
+  background: var(--dark);
+}
+
+.wccheck_submit {
+  width: 10%;
   border-left: 2px solid var(--tertiary);
 }
 
@@ -231,5 +262,6 @@ button.submit {
   width: 10%;
   height: 100px;
   font-size: 3rem;
+  border-radius: 0;
 }
 </style>
