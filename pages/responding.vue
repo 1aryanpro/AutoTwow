@@ -12,9 +12,7 @@ export default Vue.extend({
       s = s.replace(/(^\s*)|(\s*$)/gi, ''); //exclude  start and end white-space
       s = s.replace(/[ ]{2,}/gi, ' '); //2 or more space to 1
       s = s.replace(/\n /, '\n'); // exclude newline with a start spacing
-      return s.split(' ').filter(function (str) {
-        return str != '';
-      }).length;
+      return s.split(' ').filter((str) => str != '').length;
     },
   },
 });
@@ -36,7 +34,7 @@ export default Vue.extend({
       rows="1"
       wrap="soft"
     ></textarea>
-    <p>{{wordCount()}} words, {{response.length}} chars</p>
+    <p>{{ wordCount() }} words, {{ response.length }} chars</p>
   </div>
 </template>
 

@@ -1,5 +1,12 @@
-<script lang="ts">
+<script>
 import TwowSort from '../components/twowsort.js';
+
+function countWords(s) {
+  s = s.replace(/(^\s*)|(\s*$)/gi, ''); //exclude  start and end white-space
+  s = s.replace(/[ ]{2,}/gi, ' '); //2 or more space to 1
+  s = s.replace(/\n /, '\n'); // exclude newline with a start spacing
+  return s.split(' ').filter((str) => str != '').length;
+}
 
 import Vue from 'vue';
 export default Vue.extend({
@@ -10,21 +17,72 @@ export default Vue.extend({
       responseText: '',
       sort: new TwowSort([]),
       responses: {},
+      dTier: [],
+      cTier: [],
+      bTier: [],
+      aTier: [],
+      counts: {},
+      sortStep: 0,
     };
   },
   methods: {
     nextStep() {
       if (this.state == 0) {
-        let sortArr: String[] = [];
+        let sortArr = [];
         this.responseText.split('\n').forEach((el) => {
           let line = el.split('\t');
           this.responses[line[0]] = line[1];
+          this.counts[line[0]] = countWords(line[1]);
           sortArr.push(line[0]);
         });
 
-        this.sort = new TwowSort(sortArr);
+        this.dTier = sortArr.filter((id) => this.counts[id] != 10);
+        this.bTier = sortArr.filter((id) => this.counts[id] == 10);
+        this.sort = new TwowSort(this.dTier, true, false);
+        this.autoCmp();
 
         this.state++;
+      }
+    },
+    cmp(greater) {
+      this.sort.cmp(greater);
+      this.sortCheck();
+    },
+    autoCmp() {
+      if (this.sortStep != 0) return;
+      let wc1 = Math.abs(10 - this.counts[this.sort.arr[this.sort.a]]);
+      let wc2 = Math.abs(10 - this.counts[this.sort.arr[this.sort.b]]);
+
+      if (wc1 > wc2) this.cmp(1);
+      else if (wc1 < wc2) this.cmp(0);
+
+      if (wc1 != wc2) this.autoCmp();
+    },
+    tier(pos, dir) {
+      this.sort.tier(pos, dir);
+      this.sortCheck();
+    },
+    sortCheck() {
+      if (!this.sort.finished) {
+        this.autoCmp();
+        return;
+      }
+      this.sortStep++;
+      switch (this.sortStep) {
+        case 1:
+          this.bTier.push(...this.sort.up);
+          this.sort = new TwowSort(this.bTier, true, true);
+          break;
+        case 2:
+          this.cTier = this.sort.down;
+          this.aTier = this.sort.up;
+          this.sort = new TwowSort(this.cTier, false, false);
+          break;
+        case 3:
+          this.sort = new TwowSort(this.aTier, false, false);
+          break;
+        case 4:
+          break;
       }
     },
   },
@@ -45,29 +103,47 @@ export default Vue.extend({
       <button :class="$style.submit" @click="nextStep">Start Supervoter</button>
     </div>
     <div v-if="state == 2">
-       <div>
+      <div>
         <button :class="$style.wccheck_btn">
           {{ responses[sort.arr[sort.a]] }}</button
-        ><input type="number" :class="$style.wccheck_input"/>
-       </div>
+        ><input type="number" :class="$style.wccheck_input" />
+      </div>
     </div>
     <div v-if="state == 1">
       <div>
-        <button :class="$style.resp" @click="sort.cmp(0)">
+        <button :class="$style.resp" @click="cmp(0)">
           {{ responses[sort.arr[sort.a]] }}</button
-        ><button :class="$style.thumbup" @click="sort.tier(0, 0)">👍</button
-        ><button :class="$style.thumbdown" @click="sort.tier(0, 1)">👎</button>
+        ><button
+          :class="$style.thumbup"
+          @click="sort.tier(0, 0)"
+          v-if="sort.tierUp"
+        >
+          👍</button
+        ><button
+          :class="$style.thumbdown"
+          @click="sort.tier(0, 1)"
+          v-if="sort.tierDown"
+        >
+          👎
+        </button>
       </div>
       <div>
-        <button :class="$style.resp" @click="sort.cmp(1)">
+        <button :class="$style.resp" @click="cmp(1)">
           {{ responses[sort.arr[sort.b]] }}</button
-        ><button :class="$style.thumbup" @click="sort.tier(1, 0)">👍</button
-        ><button :class="$style.thumbdown" @click="sort.tier(1, 1)">👎</button>
+        ><button :class="$style.thumbup" @click="tier(1, 0)" v-if="sort.tierUp">
+          👍</button
+        ><button
+          :class="$style.thumbdown"
+          @click="tier(1, 1)"
+          v-if="sort.tierDown"
+        >
+          👎
+        </button>
       </div>
     </div>
-    <p>Array: {{sort.arr.join('')}}</p>
-    <p>Up: {{sort.up.join('')}}</p>
-    <p>Down: {{sort.down.join('')}}</p>
+    <p>Array: {{ sort.arr.join('') }}</p>
+    <p>Up: {{ sort.up.join('') }}</p>
+    <p>Down: {{ sort.down.join('') }}</p>
   </div>
 </template>
 
@@ -129,6 +205,7 @@ textarea {
 
 input {
   width: 50%;
+  text-align: center;
 }
 
 textarea {
@@ -155,5 +232,4 @@ button.submit {
   height: 100px;
   font-size: 3rem;
 }
-
 </style>

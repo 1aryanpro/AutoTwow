@@ -11,7 +11,7 @@ function mergeBounds(start, stop) {
 }
 
 export default class TwowSort {
-  constructor(arr) {
+  constructor(arr, tierUp, tierDown) {
     this.arr = arr;
     this.left = 0;
     this.right = 0;
@@ -24,6 +24,8 @@ export default class TwowSort {
     this.finished = false;
 
     this.bounds = mergeBounds(0, arr.length);
+    this.tierUp = tierUp;
+    this.tierDown = tierDown;
 
     this.nextBound();
   }
@@ -69,6 +71,9 @@ export default class TwowSort {
 
   tier(pos, dir) {
     if (this.finished) return;
+    if (!this.tierUp && dir == 0) return;
+    if (!this.tierDown && dir == 1) return;
+
     let cur = pos == 0 ? this.a : this.b;
     let el = this.arr.splice(cur, 1)[0];
     if (dir == 0) this.up.push(el);
