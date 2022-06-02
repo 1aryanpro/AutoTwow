@@ -1,6 +1,23 @@
 <script lang="ts">
 import Vue from 'vue';
-export default Vue.extend({});
+export default Vue.extend({
+  data() {
+    return {
+      response: '',
+    };
+  },
+  methods: {
+    wordCount() {
+      let s = this.response;
+      s = s.replace(/(^\s*)|(\s*$)/gi, ''); //exclude  start and end white-space
+      s = s.replace(/[ ]{2,}/gi, ' '); //2 or more space to 1
+      s = s.replace(/\n /, '\n'); // exclude newline with a start spacing
+      return s.split(' ').filter(function (str) {
+        return str != '';
+      }).length;
+    },
+  },
+});
 </script>
 
 <template>
@@ -11,8 +28,15 @@ export default Vue.extend({});
     </h3>
     <h1>How do you use this to make your life easier?</h1>
     <!-- <input type="textarea" /> -->
-    <textarea name="thing" id="thing" cols="30" rows="1" wrap="soft"></textarea>
-    <p>X words, Y chars</p>
+    <textarea
+      v-model="response"
+      name="response"
+      id="response"
+      cols="30"
+      rows="1"
+      wrap="soft"
+    ></textarea>
+    <p>{{wordCount()}} words, {{response.length}} chars</p>
   </div>
 </template>
 
@@ -38,7 +62,7 @@ h1 {
 textarea {
   width: 40vw;
   height: auto;
-  padding: 5px;
+  padding: 8px;
   font-size: 1rem;
   border: 3px solid var(--tertiary);
   margin-top: 2vh;
