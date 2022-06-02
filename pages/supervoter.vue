@@ -13,17 +13,19 @@ export default Vue.extend({
     };
   },
   methods: {
-    start() {
-      let sortArr: String[] = [];
-      this.responseText.split('\n').forEach((el) => {
-        let line = el.split('\t');
-        this.responses[line[0]] = line[1];
-        sortArr.push(line[0]);
-      });
+    nextStep() {
+      if (this.state == 0) {
+        let sortArr: String[] = [];
+        this.responseText.split('\n').forEach((el) => {
+          let line = el.split('\t');
+          this.responses[line[0]] = line[1];
+          sortArr.push(line[0]);
+        });
 
-      this.sort = new TwowSort(sortArr);
+        this.sort = new TwowSort(sortArr);
 
-      this.state++;
+        this.state++;
+      }
     },
   },
 });
@@ -40,22 +42,32 @@ export default Vue.extend({
         v-model="responseText"
         placeholder="Responses"
       ></textarea>
-      <button :class="$style.submit" @click="start">Start Supervoter</button>
+      <button :class="$style.submit" @click="nextStep">Start Supervoter</button>
+    </div>
+    <div v-if="state == 2">
+       <div>
+        <button :class="$style.wccheck_btn">
+          {{ responses[sort.arr[sort.a]] }}</button
+        ><input type="number" :class="$style.wccheck_input"/>
+       </div>
     </div>
     <div v-if="state == 1">
       <div>
         <button :class="$style.resp" @click="sort.cmp(0)">
           {{ responses[sort.arr[sort.a]] }}</button
-        ><button :class="$style.thumbup">👍</button
-        ><button :class="$style.thumbdown">👎</button>
+        ><button :class="$style.thumbup" @click="sort.tier(0, 0)">👍</button
+        ><button :class="$style.thumbdown" @click="sort.tier(0, 1)">👎</button>
       </div>
       <div>
         <button :class="$style.resp" @click="sort.cmp(1)">
           {{ responses[sort.arr[sort.b]] }}</button
-        ><button :class="$style.thumbup">👍</button
-        ><button :class="$style.thumbdown">👎</button>
+        ><button :class="$style.thumbup" @click="sort.tier(1, 0)">👍</button
+        ><button :class="$style.thumbdown" @click="sort.tier(1, 1)">👎</button>
       </div>
     </div>
+    <p>Array: {{sort.arr.join('')}}</p>
+    <p>Up: {{sort.up.join('')}}</p>
+    <p>Down: {{sort.down.join('')}}</p>
   </div>
 </template>
 
@@ -132,4 +144,16 @@ button.submit {
   font-weight: bold;
   margin-top: 15px;
 }
+
+.wccheck_btn {
+  width: 60%;
+  border-left: 2px solid var(--tertiary);
+}
+
+.wccheck_input {
+  width: 10%;
+  height: 100px;
+  font-size: 3rem;
+}
+
 </style>
