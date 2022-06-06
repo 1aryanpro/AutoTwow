@@ -1,5 +1,5 @@
 <script>
-import TwowSort from '../components/twowsort.js';
+import TwowSort from '../static/twowsort.js';
 
 function countWords(s) {
   s = s.replace(/(^\s*)|(\s*$)/gi, ''); //exclude  start and end white-space
