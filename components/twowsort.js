@@ -21,7 +21,7 @@ export default class TwowSort {
     this.buff = [];
     this.up = [];
     this.down = [];
-    this.finished = false;
+    this.finished = arr.length <= 1;
 
     this.bounds = mergeBounds(0, arr.length);
     this.tierUp = tierUp;

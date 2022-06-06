@@ -16,6 +16,7 @@ export default Vue.extend({
       userIDs: '',
       responseText: '',
       sort: new TwowSort([]),
+      numBounds: 0,
       responses: {},
       dTier: [],
       cTier: [],
@@ -28,9 +29,15 @@ export default Vue.extend({
       cur: '',
     };
   },
+  computed: {
+    sortedArr() {
+      return [...this.aTier, ...this.bTier, ...this.cTier, ...this.dTier];
+    },
+  },
   methods: {
     nextStep() {
-      if (this.state == 0) {
+      this.state++;
+      if (this.state == 1) {
         this.responseText.split('\n').forEach((el) => {
           let line = el.split('\t');
           this.responses[line[0]] = line[1];
@@ -38,16 +45,15 @@ export default Vue.extend({
           this.wcConf[line[0]] = !/^[0-9A-Za-z …’“”:,'".!?]+$/.test(line[1]);
         });
         this.nextWcCheck();
-      }
-
-      if (this.state == 1) {
+      } else if (this.state == 2) {
         let sortArr = Object.keys(this.responses);
         this.dTier = sortArr.filter((id) => this.counts[id] != 10);
+        console.log(this.dTier);
         this.bTier = sortArr.filter((id) => this.counts[id] == 10);
         this.sort = new TwowSort(this.dTier, true, false);
+        this.numBounds = this.sort.bounds.length + 1;
         this.autoCmp();
       }
-      this.state++;
     },
     nextWcCheck() {
       this.counts[this.cur] = this.wordCount;
@@ -64,6 +70,8 @@ export default Vue.extend({
     },
     autoCmp() {
       if (this.sortStep != 0) return;
+      this.sortCheck();
+
       let wc1 = Math.abs(10 - this.counts[this.sort.arr[this.sort.a]]);
       let wc2 = Math.abs(10 - this.counts[this.sort.arr[this.sort.b]]);
 
@@ -86,16 +94,22 @@ export default Vue.extend({
         case 1:
           this.bTier.push(...this.sort.up);
           this.sort = new TwowSort(this.bTier, true, true);
+          this.numBounds = this.sort.bounds.length + 1;
           break;
         case 2:
           this.cTier = this.sort.down;
           this.aTier = this.sort.up;
           this.sort = new TwowSort(this.cTier, false, false);
+          this.numBounds = this.sort.bounds.length + 1;
+          if (this.cTier.length <= 1) this.sortCheck();
           break;
         case 3:
           this.sort = new TwowSort(this.aTier, false, false);
+          this.numBounds = this.sort.bounds.length + 1;
+          if (this.aTier.length <= 1) this.sortCheck();
           break;
         case 4:
+          this.nextStep();
           break;
       }
     },
@@ -106,6 +120,7 @@ export default Vue.extend({
 <template>
   <div :class="$style.page">
     <div v-if="state == 0">
+      <h1>Input Data</h1>
       <input type="text" v-model="userIDs" placeholder="Your Response Codes" />
       <textarea
         name="responseText"
@@ -117,6 +132,7 @@ export default Vue.extend({
       <button :class="$style.submit" @click="nextStep">Start Supervoter</button>
     </div>
     <div v-if="state == 1">
+      <h1>Confirm Word Counts</h1>
       <div>
         <button :class="$style.wccheck_resp">
           {{ responses[cur] }}</button
@@ -131,6 +147,28 @@ export default Vue.extend({
       <button :class="$style.submit" @click="nextStep">Skip</button>
     </div>
     <div v-if="state == 2">
+      <progress
+        :value="
+          numBounds -
+          sort.bounds.length -
+          1 +
+          (sort.a - sort.left + sort.b - sort.mid) / (sort.right - sort.left)
+        "
+        :max="numBounds"
+      ></progress>
+      <h1>
+        Sorting
+        {{
+          sortStep == 0
+            ? 'D Tier'
+            : sortStep == 1
+            ? 'B Tier'
+            : sortStep == 2
+            ? 'C Tier'
+            : 'A Tier'
+        }}
+        Responses
+      </h1>
       <div>
         <button :class="$style.resp" @click="cmp(0)">
           {{ responses[sort.arr[sort.a]] }}</button
@@ -162,9 +200,15 @@ export default Vue.extend({
         </button>
       </div>
     </div>
+    <div v-if="state == 3">
+      <h1>Finished!</h1>
+      [KEYWORD {{ sortedArr.join('') }}]
+      <pre :class="$style.final_list">{{ sortedArr.map(id => `${id}\t${responses[id]}`).join('\n') }}</pre>
+    </div>
     <!-- <p>Array: {{ sort.arr.join('') }}</p> -->
     <!-- <p>Up: {{ sort.up.join('') }}</p> -->
     <!-- <p>Down: {{ sort.down.join('') }}</p> -->
+
   </div>
 </template>
 
@@ -229,6 +273,11 @@ input {
   text-align: center;
 }
 
+progress {
+  width: 60%;
+  height: 40px;
+}
+
 textarea {
   width: 100%;
 }
@@ -241,6 +290,10 @@ button.submit {
   color: var(--dark);
   font-weight: bold;
   margin-top: 15px;
+}
+
+h1 {
+  margin-bottom: 20px;
 }
 
 .wccheck_resp {
@@ -263,5 +316,12 @@ button.submit {
   height: 100px;
   font-size: 3rem;
   border-radius: 0;
+}
+
+.final_list {
+  text-align: left;
+  margin-top: 10px;
+  line-height: 1.25rem;
+  font-size: 1rem;
 }
 </style>
