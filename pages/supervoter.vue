@@ -50,7 +50,6 @@ export default Vue.extend({
       } else if (this.state == 2) {
         let sortArr = Object.keys(this.responses).filter(id => !this.uTier.includes(id));
         this.dTier = sortArr.filter((id) => this.counts[id] != 10);
-        console.log(this.dTier);
         this.bTier = sortArr.filter((id) => this.counts[id] == 10);
         this.sort = new TwowSort(this.dTier, true, false);
         this.numBounds = this.sort.bounds.length + 1;
@@ -72,7 +71,6 @@ export default Vue.extend({
     },
     autoCmp() {
       if (this.sortStep != 0) return;
-      this.sortCheck();
 
       let wc1 = Math.abs(10 - this.counts[this.sort.arr[this.sort.a]]);
       let wc2 = Math.abs(10 - this.counts[this.sort.arr[this.sort.b]]);
@@ -210,7 +208,6 @@ export default Vue.extend({
     <!-- <p>Array: {{ sort.arr.join('') }}</p> -->
     <!-- <p>Up: {{ sort.up.join('') }}</p> -->
     <!-- <p>Down: {{ sort.down.join('') }}</p> -->
-    <!-- {{this.sortArr}} -->
 
   </div>
 </template>
