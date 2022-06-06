@@ -7,7 +7,7 @@ export default {};
 <template>
   <nav>
     <ul>
-      <li :class="$style.brand"><NuxtLink to="/">AutoTWOW</NuxtLink></li>
+      <li :class="$style.brand"><NuxtLink to="/home">AutoTWOW</NuxtLink></li>
       <li>
         <NuxtLink to="/">Voting</NuxtLink>
       </li>
