@@ -22,6 +22,7 @@ export default Vue.extend({
       cTier: [],
       bTier: [],
       aTier: [],
+      uTier: [],
       counts: {},
       wcConf: {},
       sortStep: 0,
@@ -31,7 +32,7 @@ export default Vue.extend({
   },
   computed: {
     sortedArr() {
-      return [...this.aTier, ...this.bTier, ...this.cTier, ...this.dTier];
+      return [...this.uTier, ...this.aTier, ...this.bTier, ...this.cTier, ...this.dTier];
     },
   },
   methods: {
@@ -44,9 +45,10 @@ export default Vue.extend({
           this.counts[line[0]] = countWords(line[1]);
           this.wcConf[line[0]] = !/^[0-9A-Za-z …’“”:,'".!?]+$/.test(line[1]);
         });
+        this.uTier = this.userIDs.split('');
         this.nextWcCheck();
       } else if (this.state == 2) {
-        let sortArr = Object.keys(this.responses);
+        let sortArr = Object.keys(this.responses).filter(id => !this.uTier.includes(id));
         this.dTier = sortArr.filter((id) => this.counts[id] != 10);
         console.log(this.dTier);
         this.bTier = sortArr.filter((id) => this.counts[id] == 10);
@@ -208,6 +210,7 @@ export default Vue.extend({
     <!-- <p>Array: {{ sort.arr.join('') }}</p> -->
     <!-- <p>Up: {{ sort.up.join('') }}</p> -->
     <!-- <p>Down: {{ sort.down.join('') }}</p> -->
+    <!-- {{this.sortArr}} -->
 
   </div>
 </template>
