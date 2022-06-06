@@ -26,7 +26,7 @@ export default {};
   </div>
 </template>
 
-<style type="postcss" module>
+<style lang="postcss" module>
 .dashTable {
   text-align: center;
 }

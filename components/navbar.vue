@@ -12,6 +12,9 @@ export default {};
         <NuxtLink to="/">Voting</NuxtLink>
       </li>
       <li>
+        <NuxtLink to="supervoter">Supervoter</NuxtLink>
+      </li>
+      <li>
         <NuxtLink to="responding">Responses</NuxtLink>
       </li>
       <li>
