@@ -41,6 +41,7 @@ export default Vue.extend({
       if (this.state == 1) {
         this.responseText.split('\n').forEach((el) => {
           let line = el.split('\t');
+          if (line[1] == "" || line[1] == undefined) return;
           this.responses[line[0]] = line[1];
           this.counts[line[0]] = countWords(line[1]);
           this.wcConf[line[0]] = !/^[0-9A-Za-z …’“”:,'".!?]+$/.test(line[1]);
