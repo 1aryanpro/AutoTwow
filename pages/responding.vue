@@ -4,6 +4,7 @@ export default Vue.extend({
   data() {
     return {
       response: '',
+      respCount: 1,
     };
   },
   methods: {
@@ -25,7 +26,11 @@ export default Vue.extend({
       you look at.
     </h3>
     <h1>How do you use this to make your life easier?</h1>
-    <!-- <input type="textarea" /> -->
+
+    <h3 :class="$style.drp">DRPs: 1</h3>
+    <button>+</button>
+    <button>-</button>
+
     <textarea
       v-model="response"
       name="response"
@@ -44,10 +49,10 @@ export default Vue.extend({
   margin: auto;
   align-items: center;
   text-align: center;
+  padding-top: 10vh;
 }
 
 h3 {
-  margin-top: 20vh;
   font-size: 1.25rem;
   color: #a0a0a0;
 }
@@ -55,15 +60,31 @@ h3 {
 h1 {
   margin-top: 1vh;
   font-size: 2rem;
+  margin-bottom: 5vh;
+}
+
+.drp {
+  display: inline;
+}
+
+button {
+  width: 3vh;
+  height: 3vh;
+  background: var(--tertiary);
+  border: none;
+  border-radius: 5px;
+  margin-left: 20px;
+  cursor: pointer;
 }
 
 textarea {
   width: 40vw;
   height: auto;
+  display: block;
   padding: 8px;
   font-size: 1rem;
   border: 3px solid var(--tertiary);
-  margin-top: 2vh;
+  margin: 2vh auto;
   border-radius: 6px;
   background-color: var(--dark);
   color: var(--light);
