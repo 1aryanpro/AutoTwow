@@ -35,7 +35,6 @@ export default Vue.extend({
       you look at.
     </h3>
     <h1>How do you use this to make your life easier?</h1>
-
     <h3 :class="$style.drp">
       {{ drpCount }} DRP{{ drpCount == 1 ? '' : 's' }}
     </h3>
