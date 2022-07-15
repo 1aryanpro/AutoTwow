@@ -1,3 +1,6 @@
+import { config } from 'dotenv';
+config();
+
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -41,6 +44,10 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
   ],
+
+  env: {
+    DISCORD_SECRET: process.env.DISCORD_SECRET
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

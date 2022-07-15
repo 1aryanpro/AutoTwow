@@ -5,13 +5,14 @@ export default Vue.extend();
 </script>
 
 <template>
+  <div>
+    <h1>AutoTWOW yay! 🎉</h1>
+    <nuxt-link to="/auth/login">login</nuxt-link>
   <div :class="$style.page">
     <DashboardTable :class="$style.col" />
     <DashboardTable :class="$style.col" />
   </div>
 </template>
-
-<style lang="postcss"></style>
 
 <style lang="postcss" module>
 .page {
