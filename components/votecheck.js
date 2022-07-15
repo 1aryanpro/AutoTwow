@@ -40,4 +40,4 @@ function deviationVariance (){
     }
     console.log("The average deviation for this vote was: " + deviationSum/screenSize + "%");
 }
-deviationVariance();
+export default deviationVariance;
