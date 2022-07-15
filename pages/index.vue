@@ -1,14 +1,34 @@
+<script lang="ts">
+import Vue from 'vue';
+
+export default Vue.extend();
+</script>
+
 <template>
   <div>
     <h1>AutoTWOW yay! 🎉</h1>
     <nuxt-link to="/auth/login">login</nuxt-link>
+  <div :class="$style.page">
+    <DashboardTable :class="$style.col" />
+    <DashboardTable :class="$style.col" />
   </div>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
+<style lang="postcss" module>
+.page {
+  width: 80%;
+  margin: auto;
+  padding-top: 40px;
+}
 
-export default Vue.extend({
-  name: "IndexPage",
-});
-</script>
+.page:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.col {
+  width: 50%;
+  float: left;
+}
+</style>
