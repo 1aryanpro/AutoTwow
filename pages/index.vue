@@ -9,6 +9,7 @@ export default Vue.extend();
     <h1>AutoTWOW yay! 🎉</h1>
     <nuxt-link to="/auth/login">login</nuxt-link>
   <div :class="$style.page">
+    <nuxt-link :class="$style.login_link" to="/auth/login">Login with Discord</nuxt-link>
     <DashboardTable :class="$style.col" />
     <DashboardTable :class="$style.col" />
   </div>
@@ -27,8 +28,22 @@ export default Vue.extend();
   clear: both;
 }
 
+.login_link {
+  text-decoration: none;
+  font-size: 1em;
+  color: var(--light);
+  font-weight: bold;
+  display: block;
+  text-align: center;
+  padding: 5px;
+  border: 3px solid var(--tertiary);
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
 .col {
   width: 50%;
   float: left;
 }
+
 </style>
