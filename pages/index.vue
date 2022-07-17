@@ -5,9 +5,6 @@ export default Vue.extend();
 </script>
 
 <template>
-  <div>
-    <h1>AutoTWOW yay! 🎉</h1>
-    <nuxt-link to="/auth/login">login</nuxt-link>
   <div :class="$style.page">
     <nuxt-link :class="$style.login_link" to="/auth/login">Login with Discord</nuxt-link>
     <DashboardTable :class="$style.col" />
