@@ -33,7 +33,7 @@ const middleware : Middleware = function(ctx){
         let body = new URLSearchParams({
             client_id:'976595499060690974',
             client_secret: ctx.env.DISCORD_SECRET,
-            redirect_uri:'http://localhost:3000/auth/callback',
+            redirect_uri:`${ctx.env.HOSTNAME}:${ctx.env.PORT}/auth/callback`,
             grant_type: 'authorization_code',
             code: ctx.route.query.code
         });

@@ -69,7 +69,10 @@ export default {
   ],
 
   env: {
-    DISCORD_SECRET: process.env.DISCORD_SECRET
+    DISCORD_SECRET: process.env.DISCORD_SECRET,
+
+    HOSTNAME: process.env.HOSTNAME || 'http://localhost',
+    PORT: process.env.PORT || '3000',
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
